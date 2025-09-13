@@ -1,0 +1,71 @@
+.sidebar {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.9),
+    rgba(255, 255, 255, 0.95)
+  );
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  height: calc(100vh - 56px);
+  position: sticky;
+  top: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 700;
+  color: var(--nav);
+  font-size: 18px;
+}
+.logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent), #2bbd88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+}
+.nav a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  color: #0f1724;
+  text-decoration: none;
+  font-weight: 600;
+}
+.nav a:hover {
+  background: var(--glass);
+  border-left: 3px solid var(--accent);
+  padding-left: 7px;
+}
+
+.sidebar .spacer {
+  flex: 1;
+}
+.sidebar small {
+  color: var(--muted);
+  display: block;
+  margin-top: 8px;
+}
+.name {
+  margin-top: 6px;
+  font-weight: 700;
+}

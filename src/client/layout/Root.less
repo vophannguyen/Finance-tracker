@@ -1,5 +1,22 @@
 body {
-  max-width: 70ch;
-  margin: 0 auto;
-  padding: 0.5rem;
+  margin: 0;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial;
+  background: var(--bg);
+  color: #0f1724;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 14px;
+}
+.app {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 24px;
+  padding: 28px;
+  min-height: 100vh;
+}
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }

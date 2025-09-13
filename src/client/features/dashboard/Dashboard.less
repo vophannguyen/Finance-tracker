@@ -1,0 +1,253 @@
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.out-search {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+}
+.search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card);
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  width: 100%;
+}
+.search input {
+  border: 0;
+  outline: 0;
+  font-size: 14px;
+  background: transparent;
+  width: 100%;
+}
+.actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-width: 200px;
+  justify-self: end;
+}
+.btn {
+  background: var(--nav);
+  color: white;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 0;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn.ghost {
+  background: transparent;
+  color: var(--nav);
+  border: 1px solid rgba(20, 35, 43, 0.06);
+}
+
+/* Cards row */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.card {
+  background: var(--card);
+  padding: 18px;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  .title {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .value {
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .describe {
+    color: var(--muted);
+    font-size: 13px;
+  }
+}
+
+/* Content grids */
+.grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+}
+
+/* Transactions table */
+.panel {
+  background: var(--card);
+  padding: 18px;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  h3 {
+    margin: 0 0 12px 0;
+  }
+  hr {
+    margin: 16px 0;
+    border: none;
+    border-top: 1px solid #eef2f6;
+  }
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+thead th {
+  text-align: left;
+  color: var(--muted);
+  font-weight: 600;
+  padding: 10px 8px;
+  font-size: 13px;
+}
+tbody td {
+  padding: 12px 8px;
+  border-top: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+.amount {
+  font-weight: 700;
+}
+.amount.negative {
+  color: var(--danger);
+}
+.amount.positive {
+  color: var(--success);
+}
+
+/* Filters row */
+.filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.select,
+.input {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #e6eef6;
+  background: transparent;
+  font-size: 13px;
+}
+
+/* Budget mini list */
+.budgets {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.budget-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.budget-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.progress {
+  height: 10px;
+  background: #f1f5f9;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progress > i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #2bbd88);
+}
+
+/* Recent activity */
+.recent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.fab {
+  position: fixed;
+  right: 34px;
+  bottom: 34px;
+  background: var(--accent);
+  color: white;
+  padding: 14px 16px;
+  border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+/* Modal */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 6, 6, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal {
+  background: var(--card);
+  width: 100%;
+  max-width: 520px;
+  padding: 18px;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+.modal h3 {
+  margin-top: 0;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.form-grid .full {
+  grid-column: 1/-1;
+}
+/* Responsive */
+@media (max-width: 1000px) {
+  .app {
+    grid-template-columns: 64px 1fr;
+    padding: 18px;
+  }
+  .sidebar {
+    padding: 12px;
+    height: auto;
+    position: relative;
+    top: 0;
+  }
+  .brand .text {
+    display: none;
+  }
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 720px) {
+  .app {
+    grid-template-columns: 1fr;
+    padding: 12px;
+  }
+  .cards {
+    grid-template-columns: 1fr;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .modal {
+    margin: 20px;
+  }
+}

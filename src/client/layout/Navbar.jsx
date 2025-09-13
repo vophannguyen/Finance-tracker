@@ -3,10 +3,12 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { logout, selectToken } from "../features/auth/authSlice";
 
 import "./Navbar.less";
-
+import Profile  from "./Profile";
 /**
- * A simple navigation bar that displays "Log In" if the user is not logged in,
- * and "Log Out" if the user is logged in.
+ * * **Header / Navbar**
+  * Logo (left)
+  * Nav links: Dashboard | Expenses | Income | Budgets | Reports
+  * Profile menu (settings, export, logout)
  */
 export default function Navbar() {
   const dispatch = useDispatch();
@@ -21,11 +23,25 @@ export default function Navbar() {
 
   return (
     <nav className="top">
-      <h1>Task Tracker</h1>
+      <h1>Finance Tracker</h1>
       <menu>
         <li>
-          <NavLink to="/">Home</NavLink>
+          <NavLink to="/">Dashboard</NavLink>
         </li>
+        <li>
+          <NavLink to="/expense">Expense</NavLink>
+
+        </li>
+        <li>
+          <NavLink to="/income">Income</NavLink>
+        </li>
+        <li>
+          <NavLink to="/budget">Budget</NavLink>
+        </li>
+        <li>
+          <NavLink to="/report">Report</NavLink>
+        </li>
+        <li><Profile /></li>
         {token ? (
           <li>
             <a onClick={handleLogout}>Log Out</a>

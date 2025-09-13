@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Finance Tracker — Dashboard</title>
+
+    <!-- Google Font (optional) -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg: #f7f9fb;
+        --card: #ffffff;
+        --muted: #6b7280;
+        --nav: #14232b; /* navy */
+        --accent: #00a86b; /* green */
+        --accent-600: #007a4f;
+        --glass: rgba(20, 35, 43, 0.06);
+        --radius: 12px;
+        --shadow: 0 6px 18px rgba(16, 24, 40, 0.06);
+        --success: #00a86b;
+        --danger: #ef4444;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial;
+        background: var(--bg);
+        color: #0f1724;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        font-size: 14px;
+      }
+
+      /* Layout */
+      .app {
+        display: grid;
+        grid-template-columns: 260px 1fr;
+        gap: 24px;
+        padding: 28px;
+        min-height: 100vh;
+      }
+
+      /* Sidebar */
+      .sidebar {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.9),
+          rgba(255, 255, 255, 0.95)
+        );
+        border-radius: var(--radius);
+        padding: 20px;
+        box-shadow: var(--shadow);
+        height: calc(100vh - 56px);
+        position: sticky;
+        top: 28px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 700;
+        color: var(--nav);
+        font-size: 18px;
+      }
+      .logo {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, var(--accent), #2bbd88);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 18px;
+      }
+
+      .nav {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 6px;
+      }
+      .nav a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        border-radius: 10px;
+        color: #0f1724;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .nav a.active {
+        background: var(--glass);
+        border-left: 3px solid var(--accent);
+        padding-left: 7px;
+      }
+
+      .sidebar .spacer {
+        flex: 1;
+      }
+      .sidebar small {
+        color: var(--muted);
+      }
+
+      /* Main content */
+      .main {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+      .search {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--card);
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        width: 100%;
+      }
+      .search input {
+        border: 0;
+        outline: 0;
+        font-size: 14px;
+        background: transparent;
+        width: 100%;
+      }
+      .actions {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      .btn {
+        background: var(--nav);
+        color: white;
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: 0;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .btn.ghost {
+        background: transparent;
+        color: var(--nav);
+        border: 1px solid rgba(20, 35, 43, 0.06);
+      }
+
+      /* Cards row */
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+      }
+      .card {
+        background: var(--card);
+        padding: 18px;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .card .title {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .card .value {
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      /* Content grids */
+      .grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 16px;
+      }
+
+      /* Transactions table */
+      .panel {
+        background: var(--card);
+        padding: 18px;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+      }
+      .panel h3 {
+        margin: 0 0 12px 0;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      thead th {
+        text-align: left;
+        color: var(--muted);
+        font-weight: 600;
+        padding: 10px 8px;
+        font-size: 13px;
+      }
+      tbody td {
+        padding: 12px 8px;
+        border-top: 1px solid #f1f5f9;
+        vertical-align: middle;
+      }
+      .amount {
+        font-weight: 700;
+      }
+      .amount.negative {
+        color: var(--danger);
+      }
+      .amount.positive {
+        color: var(--success);
+      }
+
+      /* Filters row */
+      .filters {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 12px;
+      }
+      .select,
+      .input {
+        padding: 8px 10px;
+        border-radius: 8px;
+        border: 1px solid #e6eef6;
+        background: transparent;
+        font-size: 13px;
+      }
+
+      /* Budget mini list */
+      .budgets {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .budget-item {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .budget-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .progress {
+        height: 10px;
+        background: #f1f5f9;
+        border-radius: 999px;
+        overflow: hidden;
+      }
+      .progress > i {
+        display: block;
+        height: 100%;
+        background: linear-gradient(90deg, var(--accent), #2bbd88);
+      }
+
+      /* Recent activity */
+      .recent {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      /* Floating quick-add */
+      .fab {
+        position: fixed;
+        right: 34px;
+        bottom: 34px;
+        background: var(--accent);
+        color: white;
+        padding: 14px 16px;
+        border-radius: 999px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        cursor: pointer;
+        font-weight: 700;
+      }
+
+      /* Modal */
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(6, 6, 6, 0.4);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+      .modal {
+        background: var(--card);
+        width: 100%;
+        max-width: 520px;
+        padding: 18px;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+      }
+      .modal h3 {
+        margin-top: 0;
+      }
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .form-grid .full {
+        grid-column: 1/-1;
+      }
+
+      /* Responsive */
+      @media (max-width: 1000px) {
+        .app {
+          grid-template-columns: 64px 1fr;
+          padding: 18px;
+        }
+        .sidebar {
+          padding: 12px;
+          height: auto;
+          position: relative;
+          top: 0;
+        }
+        .brand .text {
+          display: none;
+        }
+        .cards {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 720px) {
+        .app {
+          grid-template-columns: 1fr;
+          padding: 12px;
+        }
+        .cards {
+          grid-template-columns: 1fr;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .modal {
+          margin: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- SIDEBAR -->
+      <aside class="sidebar" aria-label="Sidebar">
+        <div class="brand">
+          <div class="logo">FT</div>
+          <div class="text">Finance Tracker</div>
+        </div>
+
+        <nav class="nav" aria-label="Main navigation">
+          <a class="active" href="#"><span>🏠</span> Dashboard</a>
+          <a href="#"><span>🧾</span> Expenses</a>
+          <a href="#"><span>💵</span> Income</a>
+          <a href="#"><span>📊</span> Budgets</a>
+          <a href="#"><span>📁</span> Export</a>
+          <a href="#"><span>⚙️</span> Settings</a>
+        </nav>
+
+        <div class="spacer"></div>
+
+        <div>
+          <small>Signed in as</small>
+          <div style="margin-top: 6px; font-weight: 700">Alice Johnson</div>
+          <small style="display: block; margin-top: 8px; color: var(--muted)"
+            >Last sync: Sep 8, 2025</small
+          >
+        </div>
+      </aside>
+
+      <!-- MAIN -->
+      <main class="main" role="main">
+        <!-- TOPBAR -->
+        <div class="topbar">
+          <div
+            style="display: flex; gap: 12px; align-items: center; width: 100%"
+          >
+            <div class="search" role="search" aria-label="Search transactions">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M21 21l-4.35-4.35"
+                  stroke="#94a3b8"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <circle
+                  cx="11"
+                  cy="11"
+                  r="6"
+                  stroke="#94a3b8"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <input
+                placeholder="Search transactions, descriptions or amounts"
+              />
+            </div>
+
+            <div class="actions" style="min-width: 200px; justify-self: end">
+              <button class="btn ghost" id="exportBtn">Export</button>
+              <button class="btn" id="openAdd">Quick Add</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARDS -->
+        <section class="cards" aria-label="Summary cards">
+          <div class="card">
+            <div class="title">Total Balance</div>
+            <div class="value">$2,650.00</div>
+            <div style="color: var(--muted); font-size: 13px">
+              All accounts combined
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="title">Income (This month)</div>
+            <div class="value">$3,800.00</div>
+            <div style="color: var(--muted); font-size: 13px">
+              Net income received
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="title">Expenses (This month)</div>
+            <div class="value">$1,270.50</div>
+            <div style="color: var(--muted); font-size: 13px">
+              Total spending
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="title">Remaining Budget</div>
+            <div class="value">$880.00</div>
+            <div style="color: var(--muted); font-size: 13px">
+              Across all categories
+            </div>
+          </div>
+        </section>
+
+        <!-- MAIN GRID -->
+        <section class="grid">
+          <!-- Transactions Panel -->
+          <div class="panel">
+            <h3>Recent Transactions</h3>
+
+            <div class="filters" aria-hidden="false">
+              <select class="select" aria-label="Filter by date range">
+                <option>Last 7 days</option>
+                <option>Last 30 days</option>
+                <option selected>This month</option>
+                <option>Custom range</option>
+              </select>
+              <select class="select" aria-label="Filter by category">
+                <option>All categories</option>
+                <option>Groceries</option>
+                <option>Rent</option>
+                <option>Dining Out</option>
+              </select>
+              <input class="input" placeholder="Search description or amount" />
+            </div>
+
+            <div style="overflow: auto">
+              <table role="table" aria-label="Transactions table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Account</th>
+                    <th style="text-align: right">Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>2025-09-03</td>
+                    <td>Rent</td>
+                    <td>Apartment rent</td>
+                    <td>Checking Account</td>
+                    <td style="text-align: right">
+                      <span class="amount negative">-$1,000.00</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>2025-09-02</td>
+                    <td>Groceries</td>
+                    <td>Walmart groceries</td>
+                    <td>Checking Account</td>
+                    <td style="text-align: right">
+                      <span class="amount negative">-$120.50</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>2025-09-02</td>
+                    <td>Dining Out</td>
+                    <td>Restaurant dinner</td>
+                    <td>Savings Account</td>
+                    <td style="text-align: right">
+                      <span class="amount negative">-$60.00</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>2025-09-01</td>
+                    <td>Salary</td>
+                    <td>Monthly Salary</td>
+                    <td>Checking Account</td>
+                    <td style="text-align: right">
+                      <span class="amount positive">+$3,000.00</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>2025-09-01</td>
+                    <td>Freelance</td>
+                    <td>Freelance project</td>
+                    <td>Savings Account</td>
+                    <td style="text-align: right">
+                      <span class="amount positive">+$800.00</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Right column: Budgets + Quick Stats -->
+          <aside class="panel">
+            <h3>Budgets (This month)</h3>
+
+            <div class="budgets">
+              <div class="budget-item">
+                <div class="budget-row">
+                  <strong>Groceries</strong>
+                  <span>$120.50 / $400</span>
+                </div>
+                <div
+                  class="progress"
+                  role="progressbar"
+                  aria-valuenow="30"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                >
+                  <i style="width: 30%"></i>
+                </div>
+              </div>
+
+              <div class="budget-item">
+                <div class="budget-row">
+                  <strong>Rent</strong>
+                  <span>$1,000 / $1,000</span>
+                </div>
+                <div
+                  class="progress"
+                  role="progressbar"
+                  aria-valuenow="100"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                >
+                  <i style="width: 100%"></i>
+                </div>
+              </div>
+
+              <div class="budget-item">
+                <div class="budget-row">
+                  <strong>Dining Out</strong>
+                  <span>$60 / $200</span>
+                </div>
+                <div
+                  class="progress"
+                  role="progressbar"
+                  aria-valuenow="30"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                >
+                  <i style="width: 30%"></i>
+                </div>
+              </div>
+            </div>
+
+            <hr
+              style="
+                margin: 16px 0;
+                border: none;
+                border-top: 1px solid #eef2f6;
+              "
+            />
+
+            <div class="recent">
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                "
+              >
+                <strong>Accounts</strong>
+                <a href="#" style="color: var(--muted); font-size: 13px"
+                  >Manage</a
+                >
+              </div>
+
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  gap: 8px;
+                  margin-top: 10px;
+                "
+              >
+                <div style="display: flex; justify-content: space-between">
+                  <span>Checking Account</span
+                  ><span style="font-weight: 700">$1,379.50</span>
+                </div>
+                <div style="display: flex; justify-content: space-between">
+                  <span>Cash Wallet</span
+                  ><span style="font-weight: 700">$150.00</span>
+                </div>
+                <div style="display: flex; justify-content: space-between">
+                  <span>Savings Account</span
+                  ><span style="font-weight: 700">$5,000.00</span>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </section>
+      </main>
+    </div>
+
+    <!-- Floating action -->
+    <button class="fab" id="openAddFab">+ Add</button>
+
+    <!-- Modal -->
+    <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+      <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalTitle"
+      >
+        <h3 id="modalTitle">Quick Add Transaction</h3>
+
+        <div style="margin-top: 8px; font-size: 13px; color: var(--muted)">
+          Add expense or income quickly
+        </div>
+
+        <form id="quickAddForm" style="margin-top: 12px">
+          <div class="form-grid" style="margin-bottom: 10px">
+            <input class="input" type="date" name="date" value="2025-09-10" />
+            <select class="select" name="type">
+              <option value="expense">Expense</option>
+              <option value="income">Income</option>
+            </select>
+
+            <select class="select full" name="category">
+              <option>Groceries</option>
+              <option>Rent</option>
+              <option>Salary</option>
+              <option>Dining Out</option>
+              <option>Freelance</option>
+            </select>
+
+            <input
+              class="input full"
+              type="text"
+              name="description"
+              placeholder="Description"
+            />
+            <input
+              class="input"
+              type="number"
+              step="0.01"
+              name="amount"
+              placeholder="Amount"
+            />
+            <select class="select" name="account">
+              <option>Checking Account</option>
+              <option>Cash Wallet</option>
+              <option>Savings Account</option>
+            </select>
+          </div>
+
+          <div style="display: flex; gap: 8px; justify-content: flex-end">
+            <button type="button" class="btn ghost" id="cancelAdd">
+              Cancel
+            </button>
+            <button type="submit" class="btn">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      // Simple interactions: open/close modal, export simulation
+      const openAdd = document.getElementById("openAdd");
+      const openAddFab = document.getElementById("openAddFab");
+      const modalBackdrop = document.getElementById("modalBackdrop");
+      const cancelAdd = document.getElementById("cancelAdd");
+      const quickAddForm = document.getElementById("quickAddForm");
+      const exportBtn = document.getElementById("exportBtn");
+
+      function openModal() {
+        modalBackdrop.style.display = "flex";
+        modalBackdrop.setAttribute("aria-hidden", "false");
+      }
+      function closeModal() {
+        modalBackdrop.style.display = "none";
+        modalBackdrop.setAttribute("aria-hidden", "true");
+      }
+
+      openAdd?.addEventListener("click", openModal);
+      openAddFab?.addEventListener("click", openModal);
+      cancelAdd?.addEventListener("click", closeModal);
+      modalBackdrop?.addEventListener("click", (e) => {
+        if (e.target === modalBackdrop) closeModal();
+      });
+
+      quickAddForm?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        // NOTE: This is a demo. Replace with AJAX / API call in production.
+        const form = new FormData(quickAddForm);
+        const payload = {
+          date: form.get("date"),
+          type: form.get("type"),
+          category: form.get("category"),
+          description: form.get("description"),
+          amount: parseFloat(form.get("amount")),
+          account: form.get("account"),
+        };
+        console.log("Quick Add payload (demo):", payload);
+        alert("Transaction added (demo). Check console for payload.");
+        closeModal();
+      });
+
+      exportBtn?.addEventListener("click", () => {
+        // Demo export: You would call backend export endpoint to generate CSV/PDF
+        alert(
+          "Export started (demo). Implement server-side export to generate CSV/PDF."
+        );
+      });
+
+      // Accessibility: close modal with ESC
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeModal();
+      });
+    </script>
+  </body>
+</html>

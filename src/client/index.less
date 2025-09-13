@@ -2,7 +2,18 @@
 @text: #333;
 @link-color: #428bca; // sea blue
 @link-color-hover: darken(@link-color, 10%);
+@primary: Navy (#1e2a38);
 
+@Secondary: Indigo Blue (#6366f1);
+
+@Error-Alert: Rose (#f43f5e);
+@Accent-Color: Emerald (#00a86b);
+
+@Background: #dddedf;
+
+// @Typography: Inter / SF Pro / Roboto (bold headers, light body);
+
+// @UI Elements: Rounded corners (16px), subtle shadows, neumorphic feel;
 @font-face {
   font-family: Inter;
   src: url("./assets/Inter.ttf");
@@ -12,7 +23,7 @@
   font-family: Inter, sans-serif;
 
   color: @text;
-  background-color: @bg;
+  background-color: @Background;
 }
 
 * {
@@ -29,11 +40,30 @@ menu {
 
 a {
   text-decoration: none;
-  color: @link-color;
   cursor: pointer;
 
   &:hover {
     text-decoration: underline;
     color: @link-color-hover;
   }
+}
+:root {
+  --bg: #f7f9fb;
+  --card: #ffffff;
+  --muted: #6b7280;
+  --nav: #14232b; /* navy */
+  --accent: #00a86b; /* green */
+  --accent-600: #007a4f;
+  --glass: rgba(20, 35, 43, 0.06);
+  --radius: 12px;
+  --shadow: 0 6px 18px rgba(16, 24, 40, 0.06);
+  --success: #00a86b;
+  --danger: #ef4444;
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
 }
