@@ -1,12 +1,24 @@
+@primary: #1e2a38;
+
+@Secondary: #6366f1;
+
+@Error-Alert: #f43f5e;
+@Accent-Color: #00a86b;
+
+@Background: #f9fafb;
 nav.top {
+  height: 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  border-bottom: 2px solid #aaa;
-
+  background-color: @primary;
+  color: @Background;
+  border-radius: 16px 16px 0 0;
   menu {
     display: flex;
     gap: 1ch;
+  }
+  a {
+    color: @Background;
   }
 }
