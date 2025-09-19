@@ -1,32 +1,38 @@
+import { NavLink } from "react-router-dom";
 import "./Sidebar.less";
+import { useSelector } from "react-redux";
+import { selectToken } from "../features/auth/authSlice";
+import Login from "../features/auth/Login";
 
 export default function Sidebar() {
+  const token = useSelector(selectToken);
+
   return (
     <aside className="sidebar" aria-label="Sidebar">
       <div className="brand">
         <div className="logo">FT</div>
         <div className="text">Finance Tracker</div>
       </div>
-      <nav className="nav" aria-label="Main navigation">
-        <a className="active" href="#">
+      <menu className="nav">
+        <NavLink to="/">
           <span>🏠</span> Dashboard
-        </a>
-        <a href="#">
+        </NavLink>
+        <NavLink to="/expense">
           <span>🧾</span> Expenses
-        </a>
-        <a href="#">
+        </NavLink>
+        <NavLink to="/income">
           <span>💵</span> Income
-        </a>
-        <a href="#">
+        </NavLink>
+        <NavLink to="/budget">
           <span>📊</span> Budgets
-        </a>
+        </NavLink>
         <a href="#">
           <span>📁</span> Export
         </a>
-        <a href="#">
+        <NavLink to="/setting">
           <span>⚙️</span> Settings
-        </a>
-      </nav>
+        </NavLink>
+      </menu>
 
       <div className="spacer"></div>
 

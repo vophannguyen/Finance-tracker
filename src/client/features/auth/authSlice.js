@@ -18,7 +18,7 @@ const authApi = api.injectEndpoints({
         method: "POST",
         body: credentials,
       }),
-      transformErrorResponse: (response) => response.data,
+      transformErrorResponse: (response) => response,
     }),
   }),
 });

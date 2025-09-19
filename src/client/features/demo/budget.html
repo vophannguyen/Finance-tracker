@@ -1,39 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Budgets - Finance Tracker</title>
-    <link rel="stylesheet" href="style.css" />
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #f5f7fa;
+        color: #333;
+      }
+
+      header {
+        background: #4caf50;
+        color: white;
+        padding: 1.5rem;
+        text-align: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      }
+
+      .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 2rem auto;
+      }
+
+      .header-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+
+      .header-section h2 {
+        margin: 0;
+        font-size: 1.6rem;
+      }
+
+      .add-btn {
+        background: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      .add-btn:hover {
+        background: #45a049;
+      }
+
+      .budgets-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .budget-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: 0.3s;
+      }
+
+      .budget-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+      }
+
+      .budget-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+      }
+
+      .budget-header h3 {
+        margin: 0;
+        font-size: 1.2rem;
+        color: #444;
+      }
+
+      .amount {
+        font-weight: bold;
+        font-size: 1rem;
+        color: #333;
+      }
+
+      .progress-bar {
+        background: #e0e0e0;
+        border-radius: 8px;
+        overflow: hidden;
+        height: 14px;
+        margin-bottom: 0.5rem;
+      }
+
+      .progress {
+        height: 100%;
+        transition: width 0.4s ease-in-out;
+      }
+
+      .progress.expense {
+        background: #e74c3c;
+      }
+
+      .progress.safe {
+        background: #2ecc71;
+      }
+
+      .progress.warning {
+        background: #f39c12;
+      }
+
+      .budget-footer {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.9rem;
+        color: #666;
+      }
+
+      footer {
+        text-align: center;
+        padding: 1rem;
+        background: #333;
+        color: white;
+        margin-top: 2rem;
+      }
+    </style>
   </head>
   <body>
-    <div class="app">
-      <aside class="sidebar">
-        <h2>Finance Tracker</h2>
-        <nav class="nav">
-          <a href="dashboard.html">Dashboard</a>
-          <a href="expenses.html">Expenses</a>
-          <a href="income.html">Income</a>
-          <a href="budgets.html" class="active">Budgets</a>
-          <a href="export.html">Export</a>
-          <a href="settings.html">Settings</a>
-        </nav>
-      </aside>
+    <header>Finance Tracker - Budgets</header>
 
-      <main class="main">
-        <div class="topbar">
-          <h2>Budgets</h2>
-          <button class="btn">+ Add Budget</button>
+    <div class="container">
+      <div class="header-section">
+        <h2>Your Budgets</h2>
+        <button class="add-btn">+ Add New Budget</button>
+      </div>
+
+      <div class="budgets-grid">
+        <!-- Groceries -->
+        <div class="budget-card">
+          <div class="budget-header">
+            <h3>Groceries</h3>
+            <span class="amount">$250 / $400</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress warning" style="width: 62.5%"></div>
+          </div>
+          <div class="budget-footer">
+            <span>Remaining: $150</span>
+            <span>Ends: 30 Sep</span>
+          </div>
         </div>
 
-        <div class="panel">
-          <h3>Budget Categories</h3>
-          <ul>
-            <li>Groceries: $120.50 / $400</li>
-            <li>Rent: $1,000 / $1,000</li>
-            <li>Dining Out: $60 / $200</li>
-          </ul>
+        <!-- Rent -->
+        <div class="budget-card">
+          <div class="budget-header">
+            <h3>Rent</h3>
+            <span class="amount">$1000 / $1000</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress expense" style="width: 100%"></div>
+          </div>
+          <div class="budget-footer">
+            <span>Remaining: $0</span>
+            <span>Ends: 30 Sep</span>
+          </div>
         </div>
-      </main>
+
+        <!-- Dining Out -->
+        <div class="budget-card">
+          <div class="budget-header">
+            <h3>Dining Out</h3>
+            <span class="amount">$60 / $200</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress safe" style="width: 30%"></div>
+          </div>
+          <div class="budget-footer">
+            <span>Remaining: $140</span>
+            <span>Ends: 30 Sep</span>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <footer>
+      <p>&copy; 2025 Finance Tracker. All rights reserved.</p>
+    </footer>
   </body>
 </html>

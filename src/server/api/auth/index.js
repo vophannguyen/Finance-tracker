@@ -8,7 +8,7 @@ module.exports = router;
 /** Creates new account and returns token */
 router.post("/register", async (req, res, next) => {
   try {
-    const { username, password } = req.body;
+    const { email=username, password } = req.body;
 
     // Check if username and password provided
     if (!username || !password) {
@@ -17,12 +17,12 @@ router.post("/register", async (req, res, next) => {
 
     // Check if account already exists
     const user = await prisma.user.findUnique({
-      where: { username },
+      where: { email },
     });
     if (user) {
       throw new ServerError(
         400,
-        `Account with username ${username} already exists.`
+        `Account with username ${email} already exists.`
       );
     }
 
@@ -31,7 +31,7 @@ router.post("/register", async (req, res, next) => {
       data: { username, password },
     });
 
-    const token = jwt.sign({ id: newUser.id });
+    const token = jwt.sign({ email: newUser.email });
     res.json({ token });
   } catch (err) {
     next(err);
@@ -41,32 +41,32 @@ router.post("/register", async (req, res, next) => {
 /** Returns token for account if credentials valid */
 router.post("/login", async (req, res, next) => {
   try {
-    const { username, password } = req.body;
+    const { email, password_hash} = req.body;
 
     // Check if username and password provided
-    if (!username || !password) {
+    if (!email || !password_hash) {
       throw new ServerError(400, "Username and password required.");
     }
 
     // Check if account exists
     const user = await prisma.user.findUnique({
-      where: { username },
+      where: { email },
     });
     if (!user) {
       throw new ServerError(
         400,
-        `Account with username ${username} does not exist.`
+        `Account with username ${email} does not exist.`
       );
     }
 
     // Check if password is correct
-    const passwordValid = await bcrypt.compare(password, user.password);
+    const passwordValid = await bcrypt.compare(password_hash, user.password_hash);
     if (!passwordValid) {
       throw new ServerError(401, "Invalid password.");
     }
 
-    const token = jwt.sign({ id: user.id });
-    res.json({ token });
+    const token = jwt.sign({ email: user.email });
+    res.json({ token ,user});
   } catch (err) {
     next(err);
   }

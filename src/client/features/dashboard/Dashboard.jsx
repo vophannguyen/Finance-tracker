@@ -18,11 +18,21 @@
   * Savings Goals shortcut (Phase 2)
  */
 
+import { useSelector } from "react-redux";
 import "./Dashboard.less";
 
 import { useState } from "react";
-export function Dashboard() {
+import { useGetUserQuery } from "./dashboardSlice";
+import { selectToken } from "../auth/authSlice";
+export default function Dashboard() {
   const [add, setAdd] = useState(false);
+  const token = useSelector(selectToken);
+  const { data: user, isLoading } = useGetUserQuery();
+  
+  
+  if (!token) {
+    return <p>You must be logged in to see your tasks.</p>;
+  }
   function handleQuickAdd() {
     setAdd(() => !add);
   }
@@ -96,8 +106,17 @@ export function Dashboard() {
             <div className="describe">Across all categories</div>
           </div>
         </section>
-
-        {/* <!-- MAIN GRID --> */}
+        {/* <!-- Dashboard Panels --> */}
+        <div className="dashboard">
+          <div className="panel">
+            <h3>Cash Flow</h3>
+            <div className="chart-placeholder"></div>
+          </div>
+          <div className="panel">
+            <h3>Spending by Category</h3>
+            <div className="chart-placeholder"></div>
+          </div>
+        </div>
         <section className="grid">
           {/* <!-- Transactions Panel --> */}
           <div className="panel">
@@ -190,50 +209,48 @@ export function Dashboard() {
 
             <div className="budgets">
               <div className="budget-item">
-                <div className="budget-row">
-                  <strong>Groceries</strong>
-                  <span>$120.50 / $400</span>
+                <div className="budget-title">
+                  <span>Food</span>
+                  <span>$250.0</span>
                 </div>
-                <div
-                  className="progress"
-                  role="progressbar"
-                  aria-valuenow="30"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                >
-                  <i style={{ width: "30%" }}></i>
+                <div className="progress-bar">
+                  <div className="progress red" style={{ width: "100%" }}></div>
                 </div>
               </div>
-
               <div className="budget-item">
-                <div className="budget-row">
-                  <strong>Rent</strong>
-                  <span>$1,000 / $1,000</span>
+                <div className="budget-title">
+                  <span>Housing</span>
+                  <span>$1250 / $1500</span>
                 </div>
-                <div
-                  className="progress"
-                  role="progressbar"
-                  aria-valuenow="100"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                >
-                  <i style={{ width: "100%" }}></i>
+                <div className="progress-bar">
+                  <div
+                    className="progress green"
+                    style={{ width: "83%" }}
+                  ></div>
                 </div>
               </div>
-
               <div className="budget-item">
-                <div className="budget-row">
-                  <strong>Dining Out</strong>
-                  <span>$60 / $200</span>
+                <div className="budget-title">
+                  <span>Transport</span>
+                  <span>$180 / $300</span>
                 </div>
-                <div
-                  className="progress"
-                  role="progressbar"
-                  aria-valuenow="30"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                >
-                  <i style={{ width: `${60 % 200}%` }}></i>
+                <div className="progress-bar">
+                  <div
+                    className="progress green"
+                    style={{ width: "60%" }}
+                  ></div>
+                </div>
+              </div>
+              <div className="budget-item">
+                <div className="budget-title">
+                  <span>Entertainment</span>
+                  <span>$80 / $200</span>
+                </div>
+                <div className="progress-bar">
+                  <div
+                    className="progress green"
+                    style={{ width: "40%" }}
+                  ></div>
                 </div>
               </div>
             </div>
@@ -241,12 +258,12 @@ export function Dashboard() {
             <hr />
 
             <div className="recent">
-              <div>
+              <div className="recent-top">
                 <strong>Accounts</strong>
                 <a href="#">Manage</a>
               </div>
 
-              <div>
+              <div className="recent-bottom">
                 <div>
                   <span>Checking Account</span>
                   <span>$1,379.50</span>

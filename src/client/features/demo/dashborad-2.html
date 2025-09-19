@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Finance Dashboard</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, sans-serif;
+        display: flex;
+        background: #f7f9fb;
+        color: #333;
+      }
+
+      /* Sidebar */
+      .sidebar {
+        width: 240px;
+        background: #1e2d3d;
+        color: white;
+        height: 100vh;
+        padding: 1.5rem 1rem;
+        display: flex;
+        flex-direction: column;
+      }
+      .logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+      .nav a {
+        display: block;
+        color: #cfd8dc;
+        text-decoration: none;
+        padding: 12px 15px;
+        border-radius: 6px;
+        margin: 5px 0;
+        transition: 0.3s;
+      }
+      .nav a.active,
+      .nav a:hover {
+        background: #4caf50;
+        color: white;
+      }
+
+      /* Main content */
+      .main {
+        flex: 1;
+        padding: 1.5rem;
+      }
+
+      /* Top bar */
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+      .search input {
+        padding: 10px 15px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        width: 300px;
+      }
+
+      /* Cards */
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+      .card {
+        background: white;
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      }
+      .card h3 {
+        font-size: 1rem;
+        color: #555;
+        margin-bottom: 0.5rem;
+      }
+      .card p {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      /* Dashboard Grid */
+      .dashboard {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+      .panel {
+        background: white;
+        border-radius: 8px;
+        padding: 1rem;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      }
+      .panel h3 {
+        margin-bottom: 1rem;
+      }
+
+      .chart-placeholder {
+        background: #e3f2fd;
+        height: 220px;
+        border-radius: 8px;
+      }
+
+      /* Budgets + Transactions */
+      .bottom-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+      }
+
+      /* Budgets */
+      .budget-item {
+        margin-bottom: 1rem;
+      }
+      .budget-title {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.3rem;
+      }
+      .progress-bar {
+        height: 8px;
+        border-radius: 4px;
+        background: #e0e0e0;
+        overflow: hidden;
+      }
+      .progress {
+        height: 100%;
+      }
+      .progress.red {
+        background: #e74c3c;
+      }
+      .progress.green {
+        background: #2ecc71;
+      }
+
+      /* Transactions */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      table th,
+      table td {
+        padding: 10px;
+        text-align: left;
+      }
+      table th {
+        background: #f1f1f1;
+      }
+      table tr:nth-child(even) {
+        background: #fafafa;
+      }
+      .amount.negative {
+        color: #e74c3c;
+      }
+      .amount.positive {
+        color: #2ecc71;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">💰 PennyPilot</div>
+      <nav class="nav">
+        <a href="#" class="active">Dashboard</a>
+        <a href="#">Transactions</a>
+        <a href="#">Budgets</a>
+        <a href="#">Goals</a>
+        <a href="#">Reports</a>
+        <a href="#">Settings</a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+      <!-- Top Bar -->
+      <div class="topbar">
+        <h2>Dashboard</h2>
+        <div class="search">
+          <input type="text" placeholder="Search transactions, merchants..." />
+        </div>
+      </div>
+
+      <!-- Cards -->
+      <div class="cards">
+        <div class="card">
+          <h3>Current Balance</h3>
+          <p>$5,374.00</p>
+        </div>
+        <div class="card">
+          <h3>Income</h3>
+          <p>$4,350.00</p>
+        </div>
+        <div class="card">
+          <h3>Expenses</h3>
+          <p>$2,760.00</p>
+        </div>
+        <div class="card">
+          <h3>Savings Rate</h3>
+          <p>35%</p>
+        </div>
+      </div>
+
+      <!-- Dashboard Panels -->
+      <div class="dashboard">
+        <div class="panel">
+          <h3>Cash Flow</h3>
+          <div class="chart-placeholder"></div>
+        </div>
+        <div class="panel">
+          <h3>Spending by Category</h3>
+          <div class="chart-placeholder"></div>
+        </div>
+      </div>
+
+      <!-- Budgets + Transactions -->
+      <div class="bottom-section">
+        <div class="panel">
+          <h3>Budgets</h3>
+          <div class="budget-item">
+            <div class="budget-title"><span>Food</span><span>$250.0</span></div>
+            <div class="progress-bar">
+              <div class="progress red" style="width: 100%"></div>
+            </div>
+          </div>
+          <div class="budget-item">
+            <div class="budget-title">
+              <span>Housing</span><span>$1250 / $1500</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress green" style="width: 83%"></div>
+            </div>
+          </div>
+          <div class="budget-item">
+            <div class="budget-title">
+              <span>Transport</span><span>$180 / $300</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress green" style="width: 60%"></div>
+            </div>
+          </div>
+          <div class="budget-item">
+            <div class="budget-title">
+              <span>Entertainment</span><span>$80 / $200</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress green" style="width: 40%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Recent Transactions</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>7/18/2024</td>
+                <td>Shell</td>
+                <td>Transport</td>
+                <td class="amount negative">-52.30</td>
+              </tr>
+              <tr>
+                <td>7/17/2024</td>
+                <td>Credit Card</td>
+                <td>Income</td>
+                <td class="amount positive">200.00</td>
+              </tr>
+              <tr>
+                <td>7/17/2024</td>
+                <td>Groceries</td>
+                <td>Food</td>
+                <td class="amount negative">-125.50</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

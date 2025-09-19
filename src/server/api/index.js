@@ -16,9 +16,10 @@ router.use(async (req, res, next) => {
 
   // Get user from token
   try {
-    const { id } = jwt.verify(token);
-    const user = await prisma.user.findUniqueOrThrow({ where: { id } });
+    const { email } = jwt.verify(token);
+    const user = await prisma.user.findUniqueOrThrow({ where: { email } });
     res.locals.user = user;
+    // console.log(user)
     next();
   } catch (err) {
     console.error(err);
@@ -28,3 +29,4 @@ router.use(async (req, res, next) => {
 
 router.use("/auth", require("./auth"));
 router.use("/tasks", require("./tasks"));
+router.use("/dashboard",require("./dashboard"))
