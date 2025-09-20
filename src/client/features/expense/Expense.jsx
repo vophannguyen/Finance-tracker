@@ -1,5 +1,12 @@
 import "./Expense.less";
+import { useGetExpenseQuery } from "./expenseSlice";
 export default function Expense() {
+  const { data: data, isLoading } = useGetExpenseQuery();
+  if (isLoading) {
+    return <div>Loading....</div>;
+  }
+  console.log(data);
+  const { expense, category } = data;
   return (
     <>
       <div className="topbar">
@@ -18,18 +25,21 @@ export default function Expense() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>2025-09-02</td>
-              <td>Groceries</td>
-              <td>Walmart</td>
-              <td>-$120.50</td>
-            </tr>
-            <tr>
-              <td>2025-09-03</td>
-              <td>Rent</td>
-              <td>Apartment</td>
-              <td>-$1,000.00</td>
-            </tr>
+            {expense.map((ex) => {
+              return (
+                <tr key={ex.transaction_id}>
+                  <td>{new Date(ex.transaction_date).toDateString()}</td>
+                  <td>
+                    {
+                      category.find((cat) => cat.category_id === ex.category_id)
+                        .name
+                    }
+                  </td>
+                  <td>{ex.description}</td>
+                  <td>-${ex.amount}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
