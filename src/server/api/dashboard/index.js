@@ -11,17 +11,27 @@ router.use((req, res, next) => {
   }
   next();
 });
+/** get all informatio to dashboard ; user , transaction,account,category, budgets */
 router.get("/", async (req, res, next) => {
   try {
     const user = await prisma.user.findMany({
       where: { email: res.locals.user.email },
     });
     const transaction = await prisma.transaction.findMany({
-      where:{user_id: res.locals.user.user_id}
-    })
-    const data ={user,transaction}
+      where: { user_id: res.locals.user.user_id },
+    });
+    const account = await prisma.account.findMany({
+      where: { user_id: res.locals.user.user_id },
+    });
+    const category = await prisma.category.findMany({
+      where: { user_id: res.locals.user.user_id },
+    });
+    const budgets = await prisma.budget.findMany({
+      where: { user_id: res.locals.user.user_id },
+    });
+    const data = { user, transaction, account, category, budgets };
     res.json(data);
-    console.log(user)
+    // console.log(user);
   } catch (err) {
     next(err);
   }

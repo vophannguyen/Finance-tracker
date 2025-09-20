@@ -1,5 +1,13 @@
+import { useGetUserQuery } from "../dashboard/dashboardSlice";
 import "../expense/Expense.less";
 export default function Income() {
+  const { data: data, isLoading } = useGetUserQuery();
+  if (isLoading) {
+    return <div>Loading....</div>;
+  }
+  const { transaction, category } = data;
+  const income = transaction.filter((tran) => tran.type === "income");
+  console.log(income);
   return (
     <>
       <div className="topbar">
@@ -19,18 +27,22 @@ export default function Income() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>2025-09-01</td>
-              <td>Salary</td>
-              <td>Company XYZ</td>
-              <td>+$3,000.00</td>
-            </tr>
-            <tr>
-              <td>2025-09-02</td>
-              <td>Freelance</td>
-              <td>Design Project</td>
-              <td>+$800.00</td>
-            </tr>
+            {income.map((inco) => {
+              return (
+                <tr>
+                  <td>{new Date(inco.transaction_date).toDateString()}</td>
+                  <td>
+                    {
+                      category.find(
+                        (cat) => cat.category_id === inco.category_id
+                      ).name
+                    }
+                  </td>
+                  <td>{inco.description}</td>
+                  <td>+${inco.amount}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

@@ -27,9 +27,14 @@ import { selectToken } from "../auth/authSlice";
 export default function Dashboard() {
   const [add, setAdd] = useState(false);
   const token = useSelector(selectToken);
-  const { data: data, isLoading } = useGetUserQuery();
-  
-  
+  const { data: data, isLoading, isError } = useGetUserQuery();
+
+  if (isLoading) {
+    console.log(isError);
+    return <div>Loading....</div>;
+  }
+  const { transaction, account, category, budgets } = data;
+  console.log(transaction);
   if (!token) {
     return <p>You must be logged in </p>;
   }
@@ -84,35 +89,71 @@ export default function Dashboard() {
         <section className="cards" aria-label="Summary cards">
           <div className="card">
             <div className="title">Total Balance</div>
-            <div className="value">$2,650.00</div>
+            <div className="value">
+              ${account.reduce((ac, curAcc) => ac + Number(curAcc.balance), 0)}
+            </div>
             <div className="describe">All accounts combined</div>
           </div>
 
           <div className="card">
             <div className="title">Income (This month)</div>
-            <div className="value">$3,800.00</div>
+            <div className="value">
+              $
+              {transaction.reduce((ac, curTran) => {
+                console.log(curTran.amount);
+                if (curTran.type === "income") {
+                  return ac + Number(curTran.amount);
+                }
+                return ac;
+              }, 0)}
+            </div>
             <div className="describe">Net income received</div>
           </div>
 
           <div className="card">
             <div className="title">Expenses (This month)</div>
-            <div className="value">$1,270.50</div>
+            <div className="value">
+              $
+              {transaction.reduce((ac, curTran) => {
+                console.log(curTran.amount);
+                if (curTran.type === "expense") {
+                  return ac + Number(curTran.amount);
+                }
+                return ac;
+              }, 0)}
+            </div>
             <div className="describe">Total spending</div>
           </div>
 
           <div className="card">
             <div className="title">Remaining Budget</div>
-            <div className="value">$880.00</div>
+            <div className="value">
+              $
+              {transaction.reduce((ac, curTran) => {
+                console.log(curTran.amount);
+                if (curTran.type === "income") {
+                  return ac + Number(curTran.amount);
+                }
+                return ac;
+              }, 0) -
+                transaction.reduce((ac, curTran) => {
+                  console.log(curTran.amount);
+                  if (curTran.type === "expense") {
+                    return ac + Number(curTran.amount);
+                  }
+                  return ac;
+                }, 0)}
+            </div>
             <div className="describe">Across all categories</div>
           </div>
         </section>
         {/* <!-- Dashboard Panels --> */}
         <div className="dashboard">
-          <div className="panel">
+          <div className="panel-dashboard">
             <h3>Cash Flow</h3>
             <div className="chart-placeholder"></div>
           </div>
-          <div className="panel">
+          <div className="panel-dashboard">
             <h3>Spending by Category</h3>
             <div className="chart-placeholder"></div>
           </div>
@@ -153,54 +194,41 @@ export default function Dashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {
-
-                    <tr>
-                    <td>2025-09-03</td>
-                    <td>Rent</td>
-                    <td>Apartment rent</td>
-                    <td>Checking Account</td>
-                    <td>
-                      <span className="amount negative">-$1,000.00</span>
-                    </td>
-                  </tr>
-                  }
-                  <tr>
-                    <td>2025-09-02</td>
-                    <td>Groceries</td>
-                    <td>Walmart groceries</td>
-                    <td>Checking Account</td>
-                    <td>
-                      <span className="amount negative">-$120.50</span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>2025-09-02</td>
-                    <td>Dining Out</td>
-                    <td>Restaurant dinner</td>
-                    <td>Savings Account</td>
-                    <td>
-                      <span className="amount negative">-$60.00</span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>2025-09-01</td>
-                    <td>Salary</td>
-                    <td>Monthly Salary</td>
-                    <td>Checking Account</td>
-                    <td>
-                      <span className="amount positive">+$3,000.00</span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>2025-09-01</td>
-                    <td>Freelance</td>
-                    <td>Freelance project</td>
-                    <td>Savings Account</td>
-                    <td>
-                      <span className="amount positive">+$800.00</span>
-                    </td>
-                  </tr>
+                  {transaction.map((tran) => {
+                    return (
+                      <tr key={tran.transaction_id}>
+                        <td>
+                          {new Date(tran.transaction_date).toDateString()}
+                        </td>
+                        <td>
+                          {
+                            category.find(
+                              (cat) => cat.category_id === tran.category_id
+                            ).name
+                          }
+                        </td>
+                        <td>{tran.description}</td>
+                        <td>
+                          {
+                            account.find(
+                              (ac) => ac.account_id === tran.account_id
+                            ).account_name
+                          }
+                        </td>
+                        <td>
+                          <span
+                            className={
+                              tran.type === "income"
+                                ? "amount positive"
+                                : "amount negative"
+                            }
+                          >
+                            ${tran.amount}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -211,51 +239,51 @@ export default function Dashboard() {
             <h3>Budgets (This month)</h3>
 
             <div className="budgets">
-              <div className="budget-item">
-                <div className="budget-title">
-                  <span>Food</span>
-                  <span>$250.0</span>
-                </div>
-                <div className="progress-bar">
-                  <div className="progress red" style={{ width: "100%" }}></div>
-                </div>
-              </div>
-              <div className="budget-item">
-                <div className="budget-title">
-                  <span>Housing</span>
-                  <span>$1250 / $1500</span>
-                </div>
-                <div className="progress-bar">
-                  <div
-                    className="progress green"
-                    style={{ width: "83%" }}
-                  ></div>
-                </div>
-              </div>
-              <div className="budget-item">
-                <div className="budget-title">
-                  <span>Transport</span>
-                  <span>$180 / $300</span>
-                </div>
-                <div className="progress-bar">
-                  <div
-                    className="progress green"
-                    style={{ width: "60%" }}
-                  ></div>
-                </div>
-              </div>
-              <div className="budget-item">
-                <div className="budget-title">
-                  <span>Entertainment</span>
-                  <span>$80 / $200</span>
-                </div>
-                <div className="progress-bar">
-                  <div
-                    className="progress green"
-                    style={{ width: "40%" }}
-                  ></div>
-                </div>
-              </div>
+              {budgets.map((budget) => {
+                return (
+                  <div className="budget-item" key={budget.budget_id}>
+                    <div className="budget-title">
+                      <span>
+                        {
+                          category.find(
+                            (cat) => cat.category_id === budget.category_id
+                          ).name
+                        }
+                      </span>
+                      <span>
+                        {
+                          transaction.find(
+                            (tran) => tran.category_id === budget.category_id
+                          ).amount
+                        }
+                      </span>
+                    </div>
+                    <div className="progress-bar">
+                      <div
+                        className={
+                          (transaction.find(
+                            (tran) => tran.category_id === budget.category_id
+                          ).amount /
+                            budget.limit_amount) *
+                            100 >
+                          50
+                            ? "progress red"
+                            : "progress green"
+                        }
+                        style={{
+                          width: `${
+                            (transaction.find(
+                              (tran) => tran.category_id === budget.category_id
+                            ).amount /
+                              budget.limit_amount) *
+                            100
+                          }%`,
+                        }}
+                      ></div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
 
             <hr />
@@ -267,18 +295,14 @@ export default function Dashboard() {
               </div>
 
               <div className="recent-bottom">
-                <div>
-                  <span>Checking Account</span>
-                  <span>$1,379.50</span>
-                </div>
-                <div>
-                  <span>Cash Wallet</span>
-                  <span>$150.00</span>
-                </div>
-                <div>
-                  <span>Savings Account</span>
-                  <span>$5,000.00</span>
-                </div>
+                {account.map((ac) => {
+                  return (
+                    <div key={ac.account_id}>
+                      <span>{ac.account_name}</span>
+                      <span>${ac.balance}</span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </aside>
