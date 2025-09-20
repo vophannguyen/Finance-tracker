@@ -27,11 +27,11 @@ import { selectToken } from "../auth/authSlice";
 export default function Dashboard() {
   const [add, setAdd] = useState(false);
   const token = useSelector(selectToken);
-  const { data: user, isLoading } = useGetUserQuery();
+  const { data: data, isLoading } = useGetUserQuery();
   
   
   if (!token) {
-    return <p>You must be logged in to see your tasks.</p>;
+    return <p>You must be logged in </p>;
   }
   function handleQuickAdd() {
     setAdd(() => !add);
@@ -153,7 +153,9 @@ export default function Dashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  {
+
+                    <tr>
                     <td>2025-09-03</td>
                     <td>Rent</td>
                     <td>Apartment rent</td>
@@ -162,6 +164,7 @@ export default function Dashboard() {
                       <span className="amount negative">-$1,000.00</span>
                     </td>
                   </tr>
+                  }
                   <tr>
                     <td>2025-09-02</td>
                     <td>Groceries</td>

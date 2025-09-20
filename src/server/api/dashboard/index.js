@@ -16,7 +16,11 @@ router.get("/", async (req, res, next) => {
     const user = await prisma.user.findMany({
       where: { email: res.locals.user.email },
     });
-    res.json(user);
+    const transaction = await prisma.transaction.findMany({
+      where:{user_id: res.locals.user.user_id}
+    })
+    const data ={user,transaction}
+    res.json(data);
     console.log(user)
   } catch (err) {
     next(err);
